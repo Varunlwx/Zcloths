@@ -1,0 +1,454 @@
+/* Body Background */
+body {
+  background: #000000;
+  margin: 0;
+  padding: 0;
+}
+
+/* Spline Background */
+.spline-background {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 0;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure Spline is visible on register page specifically */
+body .spline-background {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Register page specific styles */
+.register-page .spline-background {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 50% !important;
+  height: 100% !important;
+  z-index: 0 !important;
+  background: #000000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.register-page .spline-background spline-viewer {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.spline-background spline-viewer {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Register Page Styles */
+.register-container {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 20px;
+  background: transparent;
+  width: 50%;
+}
+
+/* Position Spline background absolutely on desktop */
+.register-container .spline-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 0;
+}
+
+.register-card {
+  background: rgba(0, 0, 0, 0.8);
+  border: none;
+  border-radius: 20px;
+  padding: 20px 40px 40px 40px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  animation: registerCardSlideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.register-title {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin: 0 0 10px 0;
+  letter-spacing: 0.04em;
+  animation: titleFadeIn 1s ease 0.2s both;
+}
+
+.register-subtitle {
+  color: #e5e7eb;
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.8;
+  animation: subtitleFadeIn 1s ease 0.4s both;
+}
+
+/* Flash Messages */
+.flash-messages {
+  margin-bottom: 20px;
+}
+
+.flash-message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: flashMessageSlideIn 0.5s ease both;
+}
+
+.flash-success {
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.flash-error {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+.flash-info {
+  background: #dbeafe;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+}
+
+/* Form Styles */
+.register-form {
+  margin-bottom: 30px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  color: #ffffff;
+  font-weight: 300;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  animation: labelFadeIn 0.8s ease 0.6s both;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  animation: inputFadeIn 0.8s ease 0.8s both;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 80px;
+  animation: inputFadeIn 0.8s ease 0.8s both;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #22d3ee;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+  transform: translateY(-1px);
+}
+
+.form-input:hover,
+.form-textarea:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Register Button */
+.register-btn {
+  width: 100%;
+  padding: 14px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  animation: buttonFadeIn 0.8s ease 1s both;
+}
+
+.register-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.register-btn:hover::before {
+  left: 100%;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.register-btn:active {
+  transform: translateY(0);
+}
+
+/* Footer */
+.register-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-link {
+  color: #22d3ee;
+  text-decoration: none;
+  font-weight: 300;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.login-link:hover {
+  color: #67e8f9;
+  transform: translateY(-1px);
+}
+
+/* Animations */
+@keyframes registerCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes labelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes inputFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes flashMessageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* Change layout to vertical stacking on mobile */
+  .register-container {
+    width: 100%;
+    justify-content: center;
+    padding: 20px;
+    min-height: auto;
+    flex-direction: column;
+  }
+  
+  /* Override all Spline background positioning on mobile */
+  .spline-background,
+  .register-page .spline-background,
+  .register-container .spline-background {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: 50vh !important;
+    order: 2 !important;
+    margin-top: 20px !important;
+    z-index: 1 !important;
+  }
+  
+  .register-card {
+    padding: 15px 20px 30px 20px;
+    max-width: 100%;
+    order: 1;
+    margin-bottom: 20px;
+    z-index: 2;
+  }
+  
+  .register-title {
+    font-size: 2rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .form-input,
+  .form-textarea {
+    padding: 12px 14px;
+  }
+  
+  .register-btn {
+    padding: 12px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 15px;
+  }
+  
+  /* Ensure 3D model is properly positioned on small screens */
+  .spline-background,
+  .register-page .spline-background,
+  .register-container .spline-background {
+    height: 40vh !important;
+    position: relative !important;
+    order: 2 !important;
+  }
+  
+  .register-card {
+    padding: 15px 15px 25px 15px;
+  }
+  
+  .register-title {
+    font-size: 1.8rem;
+  }
+  
+  .form-input,
+  .form-textarea {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  /* Mobile-specific Spline viewer styles */
+  .spline-background spline-viewer,
+  .register-page .spline-background spline-viewer,
+  .register-container .spline-background spline-viewer {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+}

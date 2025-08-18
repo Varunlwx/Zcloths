@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#000000" />
+    <title>Register - ZEECLOTHS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <link rel="stylesheet" href="/static/css/register.css" />
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.48/build/spline-viewer.js"></script>
+    <script src="/static/js/auth.js"></script>
+  </head>
+  <body class="register-page">
+    <main class="register-container">
+      <div class="spline-background">
+        <spline-viewer url="https://prod.spline.design/CiLWKysJYK15AgeK/scene.splinecode"></spline-viewer>
+      </div>
+      <div class="register-card">
+        <div class="register-header">
+          <h1 class="register-title">ZEECLOTHS</h1>
+          <p class="register-subtitle">Create your account to start shopping</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form class="register-form" method="POST" action="{{ url_for('user.register') }}">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first_name" class="form-label">First Name</label>
+              <input 
+                type="text" 
+                id="first_name" 
+                name="first_name" 
+                class="form-input" 
+                placeholder="Enter your first name"
+                required
+                autocomplete="given-name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input 
+                type="text" 
+                id="last_name" 
+                name="last_name" 
+                class="form-input" 
+                placeholder="Enter your last name"
+                required
+                autocomplete="family-name"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              class="form-input" 
+              placeholder="Choose a username"
+              required
+              autocomplete="username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              class="form-input" 
+              placeholder="Enter your email address"
+              required
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              name="phone" 
+              class="form-input" 
+              placeholder="Enter your phone number"
+              autocomplete="tel"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              class="form-input" 
+              placeholder="Create a password"
+              required
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="confirm_password" class="form-label">Confirm Password</label>
+            <input 
+              type="password" 
+              id="confirm_password" 
+              name="confirm_password" 
+              class="form-input" 
+              placeholder="Confirm your password"
+              required
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="address" class="form-label">Address</label>
+            <textarea 
+              id="address" 
+              name="address" 
+              class="form-textarea" 
+              placeholder="Enter your address"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="register-btn">
+            <span>Create Account</span>
+          </button>
+        </form>
+
+        <div class="register-footer">
+          <a href="{{ url_for('user.login') }}" class="login-link">Already have an account? Login here</a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+

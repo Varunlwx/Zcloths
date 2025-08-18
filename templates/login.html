@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#000000" />
+    <title>Login - ZEECLOTHS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <link rel="stylesheet" href="/static/css/login.css" />
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.48/build/spline-viewer.js"></script>
+    <script src="/static/js/auth.js"></script>
+  </head>
+  <body class="login-page">
+    <main class="login-container">
+      <div class="spline-background">
+        <spline-viewer url="https://prod.spline.design/CiLWKysJYK15AgeK/scene.splinecode"></spline-viewer>
+      </div>
+      <div class="login-card">
+        <div class="login-header">
+          <h1 class="login-title">ZEECLOTHS</h1>
+          <p class="login-subtitle">Welcome back. Please login to continue.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form class="login-form" method="POST" action="{{ url_for('user.login') }}">
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              class="form-input" 
+              placeholder="Enter your username"
+              required
+              autocomplete="username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              class="form-input" 
+              placeholder="Enter your password"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+
+          <button type="submit" class="login-btn">
+            <span>Login</span>
+          </button>
+        </form>
+
+        <div class="login-footer">
+          <p class="demo-info">
+            <strong>Demo Credentials:</strong><br>
+            <strong>Admin User:</strong> Username: <code>admin</code> | Password: <code>admin123</code><br>
+            <strong>Normal User:</strong> Username: <code>user</code> | Password: <code>user123</code>
+          </p>
+          <a href="{{ url_for('user.register') }}" class="register-link">Don't have an account? Register here</a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+

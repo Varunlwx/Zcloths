@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - ZEECLOTHS{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Contact Page Styles - Updated with white background and black text */
+html, body { 
+  margin: 0; 
+  height: 100%; 
+  background: #ffffff; 
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.contact-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  z-index: 2;
+  padding: 120px 0 80px;
+  background: #ffffff;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.contact-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 60px 40px;
+  align-items: center;
+  background: transparent;
+  backdrop-filter: none;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.contact-text {
+  animation: contactTextSlideIn 1s ease 0.3s both;
+  opacity: 0;
+}
+
+.contact-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 30px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  animation: contactTitleFadeIn 1s ease 0.3s both;
+  opacity: 0;
+}
+
+.contact-description {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  line-height: 1.6;
+  color: #000000;
+  margin-bottom: 50px;
+  animation: contactDescriptionFadeIn 1s ease 0.6s both;
+  opacity: 0;
+  font-weight: 400;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.contact-info {
+  animation: contactInfoFadeIn 1s ease 0.9s both;
+  opacity: 0;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  color: #000000;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  color: #22d3ee;
+  transform: translateX(5px);
+}
+
+.contact-item svg {
+  width: 20px;
+  height: 20px;
+  color: #22d3ee;
+  flex-shrink: 0;
+}
+
+.contact-form {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 40px;
+  animation: contactFormSlideIn 1s ease 1.2s both;
+  opacity: 0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.contact-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border-color: #22d3ee;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  color: #000000;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 16px;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  color: #000000;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 16px;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #22d3ee;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+  transform: translateY(-2px);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #6b7280;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.submit-btn {
+  background: #22d3ee;
+  border: 2px solid #22d3ee;
+  color: #ffffff;
+  padding: 16px 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-btn:hover::before {
+  left: 100%;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(34, 211, 238, 0.3);
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+.submit-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Contact Page Animations */
+@keyframes contactTextSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes contactTitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contactDescriptionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contactInfoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contactFormSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive design for Contact page */
+@media (max-width: 1024px) {
+  .contact-hero {
+    padding: 120px 0 80px;
+  }
+  
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    text-align: center;
+    padding: 40px 30px;
+  }
+  
+  .contact-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  
+  .contact-description {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero {
+    padding: 100px 0 60px;
+  }
+  
+  .contact-content {
+    padding: 30px 20px;
+    gap: 40px;
+  }
+  
+  .contact-form {
+    padding: 30px;
+  }
+  
+  .contact-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    margin-bottom: 25px;
+  }
+  
+  .contact-description {
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-hero {
+    padding: 80px 0 40px;
+  }
+  
+  .contact-content {
+    padding: 20px 16px;
+    gap: 30px;
+  }
+  
+  .contact-form {
+    padding: 20px;
+  }
+  
+  .contact-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 20px;
+  }
+  
+  .contact-description {
+    font-size: clamp(0.8rem, 1.6vw, 0.9rem);
+    margin-bottom: 30px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="contact-hero">
+  <div class="contact-content">
+    <div class="contact-text">
+      <h1 class="contact-title">Get in Touch</h1>
+      <p class="contact-description">
+        Have questions about our premium menswear collection or need assistance with your order? 
+        We're here to help! Reach out to us and we'll get back to you as soon as possible.
+      </p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>info@zeecloths.com</span>
+        </div>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7294C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1469 21.5902 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0973 21.9454 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3146 6.72533 15.2661 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.09456 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65174C2.82196 2.44678 3.0498 2.28314 3.30379 2.17123C3.55778 2.05932 3.83233 2.00165 4.10999 2H7.10999C7.59522 1.99522 8.06574 2.16708 8.43376 2.48353C8.80178 2.79999 9.042 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97348 7.27675 9.89382 7.65376C9.81416 8.03078 9.62901 8.38357 9.35999 8.67L8.08999 9.94C9.51355 12.8695 11.6305 14.9865 14.56 16.41L15.83 15.14C16.1164 14.8709 16.4692 14.6858 16.8462 14.6061C17.2232 14.5265 17.6121 14.5554 17.97 14.69C18.8773 15.0286 19.8199 15.2634 20.78 15.39C21.2605 15.458 21.6999 15.6982 22.0164 16.0662C22.3328 16.4343 22.5047 16.9048 22.5 17.39V16.92Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>+91 (555) 123-4567</span>
+        </div>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>123 Fashion Street, Mumbai, India</span>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <form method="POST" action="{{ url_for('contact') }}">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us how we can help you..." required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Contact page specific animations
+  document.addEventListener('DOMContentLoaded', function() {
+    // Animate contact text elements
+    const contactTitle = document.querySelector('.contact-title');
+    const contactDescription = document.querySelector('.contact-description');
+    const contactInfo = document.querySelector('.contact-info');
+    const contactForm = document.querySelector('.contact-form');
+
+    // Add animation classes
+    setTimeout(() => {
+      contactTitle.style.opacity = '1';
+      contactTitle.style.transform = 'translateY(0)';
+    }, 300);
+
+    setTimeout(() => {
+      contactDescription.style.opacity = '1';
+      contactDescription.style.transform = 'translateY(0)';
+    }, 600);
+
+    setTimeout(() => {
+      contactInfo.style.opacity = '1';
+      contactInfo.style.transform = 'translateY(0)';
+    }, 900);
+
+    setTimeout(() => {
+      contactForm.style.opacity = '1';
+      contactForm.style.transform = 'translateX(0)';
+    }, 1200);
+  });
+
+  // Form submission handling
+  document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    // Simple validation
+    if (!data.name || !data.email || !data.subject || !data.message) {
+      showNotification('Please fill in all fields', 'error');
+      return;
+    }
+    
+    // Show success message (in a real app, this would send to server)
+    showNotification('Thank you for your message! We\'ll get back to you soon.', 'success');
+    this.reset();
+  });
+
+  function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 0;
+      color: white;
+      font-weight: 500;
+      font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      z-index: 1000;
+      ${type === 'success' ? 'background: rgba(16, 185, 129, 0.9);' : 'background: rgba(239, 68, 68, 0.9);'}
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+      notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      notification.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
+    }, 3000);
+  }
+</script>
+{% endblock %}
+

@@ -1,0 +1,660 @@
+{% extends "base.html" %}
+
+{% block title %}ZEECLOTHS - Collections{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Product info styling for collection page */
+  .product-info {
+    padding: 16px 0;
+    text-align: left;
+  }
+  
+  .product-name {
+    font-size: 16px;
+    font-weight: 400;
+    color: #374151;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+  }
+  
+  .product-price {
+    font-size: 14px;
+    font-weight: 400;
+    color: #374151;
+    margin: 0;
+    line-height: 1.4;
+  }
+  
+  /* Enhanced filter bar styling */
+  .filter-bar {
+    position: relative;
+    width: 100%;
+    background: #f8f8f8;
+    padding: 16px 0;
+    z-index: 3;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  
+  .filter-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+  
+  .filter-btn {
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: #9ca3af;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    margin: 0 2px;
+    line-height: 1.4;
+  }
+  
+  .filter-btn:hover {
+    color: #6b7280;
+    background: rgba(0, 0, 0, 0.03);
+  }
+  
+  .filter-btn.active {
+    background: #e5e7eb;
+    color: #111827;
+    font-weight: 500;
+  }
+  
+  /* Results info styling */
+  .results-info {
+    padding: 20px 40px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  
+  .results-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  /* Pagination styling */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 40px 0;
+    background: #ffffff;
+  }
+  
+  .page-link {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    color: #374151;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  
+  .page-link:hover {
+    background: #f3f4f6;
+  }
+  
+  .page-link.active {
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
+  }
+  
+  /* No products styling */
+  .no-products {
+    padding: 80px 40px;
+    text-align: center;
+    background: #ffffff;
+  }
+  
+  .no-products-content i {
+    font-size: 48px;
+    color: #9ca3af;
+    margin-bottom: 20px;
+  }
+  
+  .no-products-content h3 {
+    font-size: 24px;
+    color: #374151;
+    margin-bottom: 10px;
+  }
+  
+  .no-products-content p {
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .filter-container {
+      padding: 0 20px;
+      justify-content: flex-start;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    
+    .filter-container::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .filter-btn {
+      flex-shrink: 0;
+    }
+    
+    .results-info {
+      padding: 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .filter-container {
+      padding: 0 16px;
+    }
+    
+    .results-info {
+      padding: 16px;
+    }
+    
+    .collection-grid {
+      padding: 16px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Background Image -->
+
+<main class="collection-main">
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="filter-container">
+      <button class="filter-btn active" data-category="all">All</button>
+      {% for category in categories %}
+      <button class="filter-btn" data-category="{{ category.id }}">{{ category.name }}</button>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <!-- Results Info -->
+  <div class="results-info">
+    <p>Showing {{ products.items|length }} of {{ products.total }} products</p>
+    {% if search %}
+    <p>Search results for: "{{ search }}"</p>
+    {% endif %}
+    
+
+  </div>
+  
+  <!-- Products Grid -->
+  <div class="collection-grid">
+    <div class="discover-grid" id="products-grid">
+      {% for product in products.items %}
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ product.image_url }}" alt="{{ product.name }}" />
+          <div class="product-overlay">
+            <a href="{{ url_for('shop.product_detail', product_id=product.id) }}" class="btn btn-primary">View Details</a>
+          </div>
+          {% if product.original_price and product.original_price > product.price %}
+          <div class="product-badge">Sale</div>
+          {% endif %}
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-price">₹{{ "%.0f"|format(product.price) }}</p>
+          <button class="btn btn-primary add-to-cart-btn" data-product-id="{{ product.id }}">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+      
+      <!-- Additional Product Rows -->
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ url_for('static', filename='images/products/Lucid_Origin_exquisite_high_fashion_photography_of_Fullbody_sh_1 (4).jpg') }}" alt="Premium Casual Shirt" />
+          <div class="product-overlay">
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+          <div class="product-badge">New</div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Premium Casual Shirt</h3>
+          <p class="product-price">₹2,499</p>
+          <button class="btn btn-primary add-to-cart-btn" onclick="showNotification('This is a demo product. Please browse our actual collection!', 'info')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ url_for('static', filename='images/products/Lucid_Origin_exquisite_high_fashion_photography_of_Fullbody_sh_2 (1).jpg') }}" alt="Designer T-Shirt" />
+          <div class="product-overlay">
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Designer T-Shirt</h3>
+          <p class="product-price">₹1,299</p>
+          <button class="btn btn-primary add-to-cart-btn" onclick="showNotification('This is a demo product. Please browse our actual collection!', 'info')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ url_for('static', filename='images/products/Lucid_Origin_exquisite_high_fashion_photography_of_Fullbody_sh_3.jpg') }}" alt="Fashion Hoodie" />
+          <div class="product-overlay">
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+          <div class="product-badge">Sale</div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Fashion Hoodie</h3>
+          <p class="product-price">₹1,899</p>
+          <button class="btn btn-primary add-to-cart-btn" onclick="showNotification('This is a demo product. Please browse our actual collection!', 'info')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ url_for('static', filename='images/products/Lucid_Origin_exquisite_high_fashion_photography_of_Fullbody_sh_2.jpg') }}" alt="Classic Denim Jacket" />
+          <div class="product-overlay">
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Classic Denim Jacket</h3>
+          <p class="product-price">₹3,299</p>
+          <button class="btn btn-primary add-to-cart-btn" onclick="showNotification('This is a demo product. Please browse our actual collection!', 'info')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ url_for('static', filename='images/products/Flux_Dev_exquisite_high_fashion_photography_of_A_minimalistic__1 (1).jpg') }}" alt="Minimalist Sweater" />
+          <div class="product-overlay">
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+          <div class="product-badge">Trending</div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Minimalist Sweater</h3>
+          <p class="product-price">₹2,199</p>
+          <button class="btn btn-primary add-to-cart-btn" onclick="showNotification('This is a demo product. Please browse our actual collection!', 'info')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ url_for('static', filename='images/products/hoodie1.jpg') }}" alt="Casual Hoodie" />
+          <div class="product-overlay">
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Casual Hoodie</h3>
+          <p class="product-price">₹1,599</p>
+          <button class="btn btn-primary add-to-cart-btn" onclick="showNotification('This is a demo product. Please browse our actual collection!', 'info')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ url_for('static', filename='images/products/jeans1.jpg') }}" alt="Slim Fit Jeans" />
+          <div class="product-overlay">
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+          <div class="product-badge">Sale</div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Slim Fit Jeans</h3>
+          <p class="product-price">₹1,799</p>
+          <button class="btn btn-primary add-to-cart-btn" onclick="showNotification('This is a demo product. Please browse our actual collection!', 'info')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      
+      <div class="discover-item">
+        <div class="discover-image">
+          <img src="{{ url_for('static', filename='images/products/tshirt1.jpg') }}" alt="Basic T-Shirt" />
+          <div class="product-overlay">
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Basic T-Shirt</h3>
+          <p class="product-price">₹899</p>
+          <button class="btn btn-primary add-to-cart-btn" onclick="showNotification('This is a demo product. Please browse our actual collection!', 'info')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pagination -->
+  {% if products.pages > 1 %}
+  <div class="pagination">
+    {% if products.has_prev %}
+    <a href="{{ url_for('shop.shop', page=products.prev_num, category=current_category, search=search, sort=sort_by, min_price=min_price, max_price=max_price) }}" class="page-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Previous
+    </a>
+    {% endif %}
+    
+    <div class="page-numbers">
+      {% for page_num in products.iter_pages() %}
+        {% if page_num %}
+          {% if page_num != products.page %}
+          <a href="{{ url_for('shop.shop', page=page_num, category=current_category, search=search, sort=sort_by, min_price=min_price, max_price=max_price) }}" class="page-link">{{ page_num }}</a>
+          {% else %}
+          <span class="page-link active">{{ page_num }}</span>
+          {% endif %}
+        {% else %}
+        <span class="page-ellipsis">...</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+    {% if products.has_next %}
+    <a href="{{ url_for('shop.shop', page=products.next_num, category=current_category, search=search, sort=sort_by, min_price=min_price, max_price=max_price) }}" class="page-link">
+      Next
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    {% endif %}
+  </div>
+  {% endif %}
+  
+  <!-- No Products Message -->
+  {% if products.items|length == 0 %}
+  <div class="no-products">
+    <div class="no-products-content">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3>No products found</h3>
+      <p>Try adjusting your filters or search terms</p>
+      <a href="{{ url_for('shop.shop') }}" class="btn btn-primary">Clear Filters</a>
+    </div>
+  </div>
+  {% endif %}
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Global cart state management
+const CartManager = {
+  cartCount: 0,
+  isProcessing: false,
+  
+  // Initialize cart manager
+  init() {
+    this.updateCartBadge();
+    this.bindEvents();
+    console.log('CartManager initialized');
+  },
+  
+  // Bind all cart-related events
+  bindEvents() {
+    // Add to cart buttons
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+      button.addEventListener('click', (e) => this.handleAddToCart(e));
+    });
+    
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => this.handleFilter(e));
+    });
+  },
+  
+  // Handle add to cart with robust error handling
+  async handleAddToCart(event) {
+    if (this.isProcessing) {
+      console.log('Cart operation already in progress');
+      return;
+    }
+    
+    const button = event.target;
+    const productId = button.dataset.productId;
+    
+    // Handle demo products
+    if (!productId) {
+      this.showNotification('This is a demo product. Please browse our actual collection!', 'info');
+      return;
+    }
+    
+    // Validate product ID
+    if (!this.isValidProductId(productId)) {
+      this.showNotification('Invalid product ID', 'error');
+      return;
+    }
+    
+    this.isProcessing = true;
+    button.disabled = true;
+    button.textContent = 'Adding...';
+    
+    try {
+      console.log('Adding product to cart:', productId);
+      
+      const response = await this.addToCartAPI(productId);
+      
+      if (response.success) {
+        this.cartCount = response.cart_count || this.cartCount + 1;
+        this.updateCartBadge();
+        this.showNotification('Product added to cart!', 'success');
+        console.log('Product successfully added to cart');
+      } else {
+        this.showNotification(response.message || 'Failed to add product to cart', 'error');
+        console.error('Failed to add product:', response.message);
+      }
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+      this.showNotification('Network error. Please try again.', 'error');
+    } finally {
+      this.isProcessing = false;
+      button.disabled = false;
+      button.textContent = 'Add to Cart';
+    }
+  },
+  
+  // API call to add product to cart
+  async addToCartAPI(productId) {
+    const response = await fetch('/add_to_cart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({
+        product_id: parseInt(productId),
+        quantity: 1
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+  },
+  
+  // Update cart badge in navbar
+  updateCartBadge() {
+    const cartBadge = document.querySelector('.cart-badge');
+    const cartIcon = document.querySelector('.cart-icon');
+    
+    if (cartBadge) {
+      cartBadge.textContent = this.cartCount;
+    } else if (cartIcon && this.cartCount > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'cart-badge';
+      badge.textContent = this.cartCount;
+      cartIcon.appendChild(badge);
+    }
+  },
+  
+  // Validate product ID
+  isValidProductId(productId) {
+    return productId && !isNaN(parseInt(productId)) && parseInt(productId) > 0;
+  },
+  
+  // Handle filter clicks
+  handleFilter(event) {
+    const button = event.target;
+    const category = button.getAttribute('data-category');
+    
+    // Update active state
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+    
+    // Navigate to filtered view
+    const baseUrl = "{{ url_for('shop.shop') }}";
+    const url = category === 'all' ? baseUrl : `${baseUrl}?category=${category}`;
+    window.location.href = url;
+  },
+  
+  // Enhanced notification system
+  showNotification(message, type = 'info') {
+    // Remove existing notifications
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    const styles = {
+      position: 'fixed',
+      top: '20px',
+      right: '20px',
+      padding: '12px 20px',
+      borderRadius: '8px',
+      color: 'white',
+      fontWeight: '500',
+      zIndex: '10000',
+      fontFamily: 'Poppins, sans-serif',
+      fontSize: '14px',
+      maxWidth: '300px',
+      wordWrap: 'break-word',
+      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+      transform: 'translateX(100%)',
+      transition: 'transform 0.3s ease',
+      ...this.getNotificationStyle(type)
+    };
+    
+    Object.assign(notification.style, styles);
+    document.body.appendChild(notification);
+    
+    // Animate in
+    requestAnimationFrame(() => {
+      notification.style.transform = 'translateX(0)';
+    });
+    
+    // Auto remove
+    setTimeout(() => {
+      notification.style.transform = 'translateX(100%)';
+      setTimeout(() => notification.remove(), 300);
+    }, 4000);
+  },
+  
+  // Get notification styles based on type
+  getNotificationStyle(type) {
+    const styles = {
+      success: {
+        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+        borderLeft: '4px solid #059669'
+      },
+      error: {
+        background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+        borderLeft: '4px solid #dc2626'
+      },
+      info: {
+        background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+        borderLeft: '4px solid #1d4ed8'
+      },
+      warning: {
+        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+        borderLeft: '4px solid #d97706'
+      }
+    };
+    
+    return styles[type] || styles.info;
+  }
+};
+
+
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, initializing CartManager...');
+  CartManager.init();
+  
+  // GSAP animations (if available)
+  if (typeof gsap !== 'undefined') {
+    gsap.from('.discover-item', {
+      duration: 0.6,
+      y: 30,
+      opacity: 0,
+      stagger: 0.1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.discover-grid',
+        start: 'top 80%'
+      }
+    });
+  }
+});
+
+// Global error handler
+window.addEventListener('error', function(e) {
+  console.error('Global error:', e.error);
+  CartManager.showNotification('An unexpected error occurred', 'error');
+});
+
+// Network status monitoring
+window.addEventListener('online', function() {
+  CartManager.showNotification('Connection restored', 'success');
+});
+
+window.addEventListener('offline', function() {
+  CartManager.showNotification('No internet connection', 'warning');
+});
+</script>
+{% endblock %}
+

@@ -1,0 +1,466 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - ZEECLOTHS{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Admin Analytics Page Styles - Updated to match index page aesthetic */
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Admin Navbar - White text override */
+.navbar .brand {
+  color: #ffffff !important;
+}
+
+.navbar .nav-list a {
+  color: #ffffff !important;
+}
+
+.navbar .nav-list a:hover {
+  color: #22d3ee !important;
+}
+
+.navbar .nav-list a.active {
+  color: #22d3ee !important;
+}
+
+.navbar .profile-icon {
+  color: #ffffff !important;
+}
+
+.navbar .profile-icon:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #22d3ee !important;
+}
+
+.navbar .cart-icon {
+  color: #ffffff !important;
+}
+
+.navbar .cart-icon:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #22d3ee !important;
+}
+
+.navbar .welcome-text {
+  color: #ffffff !important;
+}
+
+.navbar .dropdown-item {
+  color: #ffffff !important;
+}
+
+.navbar .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #22d3ee !important;
+}
+
+.navbar .search-input {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.navbar .search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.navbar .search-input:focus {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: #22d3ee !important;
+}
+
+.admin-analytics-page {
+  position: relative;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 120px 0 80px;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #a8a8a8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.analytics-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.analytics-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.card-content {
+  padding: 2rem;
+}
+
+.metric {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  transition: all 0.3s ease;
+}
+
+.metric:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.metric:last-child {
+  margin-bottom: 0;
+}
+
+.metric-value {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.metric-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.monthly-chart {
+  display: flex;
+  align-items: end;
+  justify-content: space-around;
+  height: 250px;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.chart-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 80px;
+  transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+  transform: scale(1.05);
+}
+
+.bar {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  min-height: 10px;
+  transition: height 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.bar-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 0.75rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.bar-value {
+  font-size: 0.75rem;
+  color: #fff;
+  font-weight: 600;
+  margin-top: 0.25rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.no-data {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+}
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.stat-item:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+.stat-item svg {
+  width: 48px;
+  height: 48px;
+  color: rgba(255, 255, 255, 0.9);
+  flex-shrink: 0;
+}
+
+.stat-content h4 {
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.stat-content p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .monthly-chart {
+    height: 200px;
+    gap: 1rem;
+  }
+  
+  .chart-bar {
+    max-width: 60px;
+  }
+  
+  .bar-label {
+    font-size: 0.75rem;
+  }
+  
+  .bar-value {
+    font-size: 0.65rem;
+  }
+  
+  .quick-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .stat-item {
+    padding: 1.5rem;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-analytics-page">
+  <div class="container">
+    <div class="page-header">
+        <h1>Analytics Dashboard</h1>
+    </div>
+
+    <div class="analytics-grid">
+        <div class="analytics-card">
+            <div class="card-header">
+                <h3>Revenue Overview</h3>
+            </div>
+            <div class="card-content">
+                <div class="metric">
+                    <span class="metric-value">₹{{ "%.0f"|format(total_revenue) }}</span>
+                    <span class="metric-label">Total Revenue</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">{{ total_orders }}</span>
+                    <span class="metric-label">Total Orders</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">₹{{ "%.0f"|format(avg_order_value) }}</span>
+                    <span class="metric-label">Average Order Value</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <div class="card-header">
+                <h3>Monthly Revenue</h3>
+            </div>
+            <div class="card-content">
+                {% if monthly_revenue %}
+                <div class="monthly-chart">
+                    {% for month, revenue in monthly_revenue %}
+                    <div class="chart-bar">
+                        <div class="bar" style="height: {{ (revenue / total_revenue * 100) if total_revenue > 0 else 0 }}%"></div>
+                        <span class="bar-label">{{ month }}</span>
+                        <span class="bar-value">₹{{ "%.0f"|format(revenue) }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="no-data">No revenue data available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="quick-stats">
+        <div class="stat-item">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 9L12 6L16 10L21 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+            <div class="stat-content">
+                <h4>Revenue Growth</h4>
+          <p>Track your business growth over time with detailed analytics and insights</p>
+            </div>
+        </div>
+        <div class="stat-item">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+            <div class="stat-content">
+                <h4>Order Management</h4>
+          <p>Monitor order status and fulfillment with real-time tracking and updates</p>
+            </div>
+        </div>
+        <div class="stat-item">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M23 21V19C23 17.9391 22.5786 16.9217 21.8284 16.1716C21.0783 15.4214 20.0609 15 19 15H18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+            <div class="stat-content">
+                <h4>Customer Insights</h4>
+          <p>Understand your customer base with detailed analytics and behavior patterns</p>
+        </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Admin analytics page functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Animate chart bars on load
+  const bars = document.querySelectorAll('.bar');
+  bars.forEach((bar, index) => {
+    const height = bar.style.height;
+    bar.style.height = '0%';
+    setTimeout(() => {
+      bar.style.height = height;
+    }, index * 100);
+  });
+  
+  // Add hover effects to metrics
+  const metrics = document.querySelectorAll('.metric');
+  metrics.forEach(metric => {
+    metric.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.02)';
+    });
+    metric.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+    });
+  });
+  
+  // Add click effects to stat items
+  const statItems = document.querySelectorAll('.stat-item');
+  statItems.forEach(item => {
+    item.addEventListener('click', function() {
+      this.style.transform = 'translateY(-8px) scale(0.98)';
+      setTimeout(() => {
+        this.style.transform = 'translateY(-8px) scale(1)';
+      }, 150);
+    });
+  });
+  
+  // Auto-refresh analytics data every 5 minutes
+  setInterval(() => {
+    console.log('Refreshing analytics data...');
+    // Here you would typically make an AJAX call to refresh the data
+  }, 300000);
+});
+</script>
+{% endblock %}
+
+

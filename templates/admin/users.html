@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users - ZEECLOTHS{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Admin Users Page Styles - Updated to match index page aesthetic */
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Admin Navbar - White text override */
+.navbar .brand {
+  color: #ffffff !important;
+}
+
+.navbar .nav-list a {
+  color: #ffffff !important;
+}
+
+.navbar .nav-list a:hover {
+  color: #22d3ee !important;
+}
+
+.navbar .nav-list a.active {
+  color: #22d3ee !important;
+}
+
+.navbar .profile-icon {
+  color: #ffffff !important;
+}
+
+.navbar .profile-icon:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #22d3ee !important;
+}
+
+.navbar .cart-icon {
+  color: #ffffff !important;
+}
+
+.navbar .cart-icon:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #22d3ee !important;
+}
+
+.navbar .welcome-text {
+  color: #ffffff !important;
+}
+
+.navbar .dropdown-item {
+  color: #ffffff !important;
+}
+
+.navbar .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #22d3ee !important;
+}
+
+.navbar .search-input {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.navbar .search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.navbar .search-input:focus {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: #22d3ee !important;
+}
+
+.admin-users-page {
+  position: relative;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 120px 0 80px;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #a8a8a8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.users-table {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+th {
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease;
+}
+
+.role-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.role-badge.admin { 
+  background: rgba(13, 110, 253, 0.1); 
+  color: #0d6efd; 
+  border-color: rgba(13, 110, 253, 0.3);
+}
+.role-badge.user { 
+  background: rgba(25, 135, 84, 0.1); 
+  color: #198754; 
+  border-color: rgba(25, 135, 84, 0.3);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.empty-state svg {
+  width: 64px;
+  height: 64px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+  color: #fff;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.empty-state p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.page-info {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .users-table {
+    overflow-x: auto;
+  }
+  
+  th, td {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .pagination {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .empty-state {
+    padding: 3rem 1.5rem;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-users-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>Manage Users</h1>
+    </div>
+
+    {% if users.items %}
+    <div class="users-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Joined</th>
+            <th>Orders</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users.items %}
+          <tr>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+              {% if user.is_admin %}
+              <span class="role-badge admin">Admin</span>
+              {% else %}
+              <span class="role-badge user">User</span>
+              {% endif %}
+            </td>
+            <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+            <td>{{ user.orders|length }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if users.pages > 1 %}
+    <div class="pagination">
+      {% if users.has_prev %}
+      <a href="{{ url_for('admin.users', page=users.prev_num) }}" class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Previous
+      </a>
+      {% endif %}
+      
+      <span class="page-info">Page {{ users.page }} of {{ users.pages }}</span>
+      
+      {% if users.has_next %}
+      <a href="{{ url_for('admin.users', page=users.next_num) }}" class="btn btn-outline">
+        Next
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M23 21V19C23 17.9391 22.5786 16.9217 21.8284 16.1716C21.0783 15.4214 20.0609 15 19 15H18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3>No Users Found</h3>
+      <p>Users will appear here once they register.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Admin users page functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Add hover effects to table rows
+  const tableRows = document.querySelectorAll('tbody tr');
+  tableRows.forEach(row => {
+    row.addEventListener('mouseenter', function() {
+      this.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+    });
+    row.addEventListener('mouseleave', function() {
+      this.style.backgroundColor = 'transparent';
+    });
+  });
+
+  // Add hover effects to role badges
+  const roleBadges = document.querySelectorAll('.role-badge');
+  roleBadges.forEach(badge => {
+    badge.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.05)';
+    });
+    badge.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+    });
+  });
+
+  // Add click effects to pagination buttons
+  const paginationButtons = document.querySelectorAll('.pagination .btn');
+  paginationButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      this.style.transform = 'translateY(-2px) scale(0.98)';
+      setTimeout(() => {
+        this.style.transform = 'translateY(-2px) scale(1)';
+      }, 150);
+    });
+  });
+
+  // Auto-refresh user data every 30 seconds
+  setInterval(() => {
+    console.log('Refreshing user data...');
+    // Here you would typically make an AJAX call to refresh the data
+  }, 30000);
+});
+</script>
+{% endblock %}
+
+

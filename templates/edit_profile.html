@@ -1,0 +1,470 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - ZEECLOTHS{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Edit Profile Page Styles - Updated to white background with black text */
+html, body { 
+  margin: 0; 
+  height: 100%; 
+  background: #ffffff; 
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.edit-profile-page {
+  position: relative;
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 120px 0 80px;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 60px;
+  animation: pageHeaderFadeIn 1s ease 0.3s both;
+  opacity: 0;
+}
+
+.page-header h1 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.edit-profile-form {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: formFadeIn 1s ease 0.6s both;
+  opacity: 0;
+}
+
+.edit-profile-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+}
+
+.form-section {
+  margin-bottom: 32px;
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.form-section h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  color: #000000;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 16px 20px;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  color: #000000;
+  font-size: 1rem;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  transition: all 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #6c757d;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-group select option {
+  background: #ffffff;
+  color: #000000;
+  padding: 8px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+
+
+.form-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid #e9ecef;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  border-radius: 0;
+  text-decoration: none;
+  font-weight: 500;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: #007bff;
+  border: 1px solid #007bff;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  color: #000000;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+/* Animations */
+@keyframes pageHeaderFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes formFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .edit-profile-page {
+    padding: 100px 0 60px;
+  }
+  
+  .container {
+    padding: 0 20px;
+  }
+  
+  .edit-profile-form {
+    padding: 30px 20px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .page-header h1 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-profile-page {
+    padding: 80px 0 40px;
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .edit-profile-form {
+    padding: 24px 16px;
+  }
+  
+
+  
+  .page-header h1 {
+    font-size: clamp(1.8rem, 3.5vw, 2.2rem);
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="edit-profile-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>Edit Profile</h1>
+    </div>
+    
+    <form class="edit-profile-form" method="POST">
+      
+      <!-- Personal Information -->
+      <div class="form-section">
+        <h3>Personal Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" value="{{ current_user.first_name }}" required>
+          </div>
+          <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" value="{{ current_user.last_name }}" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" value="{{ current_user.email }}" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" value="{{ current_user.phone or '' }}">
+        </div>
+      </div>
+      
+      <!-- Address Information -->
+      <div class="form-section">
+        <h3>Address Information</h3>
+        <div class="form-group">
+          <label for="address_line1">Address Line 1</label>
+          <input type="text" id="address_line1" name="address_line1" value="{{ current_user.address_line1 or '' }}">
+        </div>
+        <div class="form-group">
+          <label for="address_line2">Address Line 2</label>
+          <input type="text" id="address_line2" name="address_line2" value="{{ current_user.address_line2 or '' }}">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" value="{{ current_user.city or '' }}">
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" value="{{ current_user.state or '' }}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="postal_code">Postal Code</label>
+            <input type="text" id="postal_code" name="postal_code" value="{{ current_user.postal_code or '' }}">
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country" name="country">
+              <option value="India" {{ 'selected' if current_user.country == 'India' else '' }}>India</option>
+              <option value="United States" {{ 'selected' if current_user.country == 'United States' else '' }}>United States</option>
+              <option value="United Kingdom" {{ 'selected' if current_user.country == 'United Kingdom' else '' }}>United Kingdom</option>
+              <option value="Canada" {{ 'selected' if current_user.country == 'Canada' else '' }}>Canada</option>
+              <option value="Australia" {{ 'selected' if current_user.country == 'Australia' else '' }}>Australia</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Preferences -->
+      <div class="form-section">
+        <h3>Preferences</h3>
+        <div class="form-group">
+          <label for="newsletter">Newsletter Subscription</label>
+          <select id="newsletter" name="newsletter">
+            <option value="1" {{ 'selected' if current_user.newsletter else '' }}>Yes, send me updates</option>
+            <option value="0" {{ 'selected' if not current_user.newsletter else '' }}>No, don't send updates</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself...">{{ current_user.bio or '' }}</textarea>
+        </div>
+      </div>
+      
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16L21 8V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 21V13H7V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 3V8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Save Changes
+        </button>
+                 <a href="{{ url_for('user.profile') }}" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Edit profile page functionality
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // Form validation
+  const form = document.querySelector('.edit-profile-form');
+  form.addEventListener('submit', function(e) {
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      e.preventDefault();
+      showNotification('Please enter a valid email address', 'error');
+      return;
+    }
+    
+    // Basic phone validation (optional)
+    if (phone && !/^[\+]?[1-9][\d]{0,15}$/.test(phone.replace(/\s/g, ''))) {
+      e.preventDefault();
+      showNotification('Please enter a valid phone number', 'error');
+      return;
+    }
+  });
+});
+
+function showNotification(message, type) {
+  const notification = document.createElement('div');
+  notification.className = `notification notification-${type}`;
+  notification.textContent = message;
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 0;
+    color: white;
+    font-weight: 500;
+    font-family: Poppins, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    z-index: 1000;
+    ${type === 'success' ? 'background: rgba(16, 185, 129, 0.9);' : 'background: rgba(239, 68, 68, 0.9);'}
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Animate in
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+  }, 100);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      notification.remove();
+    }, 300);
+  }, 3000);
+}
+</script>
+{% endblock %}
+
+
+
