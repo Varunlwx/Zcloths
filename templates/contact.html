@@ -4,6 +4,34 @@
 
 {% block extra_css %}
 <style>
+/* Contact page: force navbar to white background */
+.navbar {
+  background: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* Ensure navbar text/icons are black on this page */
+.navbar .brand,
+.navbar .nav-list a,
+.navbar .profile-icon,
+
+.navbar .welcome-text,
+.navbar .dropdown-item,
+.navbar .search-input {
+  color: #000000 !important;
+}
+
+.navbar .profile-icon:hover,
+
+.navbar .dropdown-item:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+  color: #22d3ee !important;
+}
+
+.navbar .search-input::placeholder {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
 /* Contact Page Styles - Updated with white background and black text */
 html, body { 
   margin: 0; 

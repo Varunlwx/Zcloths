@@ -663,7 +663,7 @@ html, body {
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-          <button class="btn btn-primary" onclick="addToCart()">
+          <button class="btn btn-primary" onclick="addToCartFromDetail()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -762,46 +762,23 @@ function changeQuantity(delta) {
   quantity = newQuantity;
 }
 
-function addToCart() {
+function addToCartFromDetail() {
   if (!selectedSize || !selectedColor) {
     showNotification('Please select size and color', 'error');
     return;
   }
   
   const productData = {
-    product_id: parseInt('{{ product.id }}'),
+    id: parseInt('{{ product.id }}'),
     name: '{{ product.name }}',
     price: parseFloat('{{ product.price }}'),
-            image: '{{ product.image_url }}',
+    image: '{{ product.image_url }}',
     size: selectedSize,
     color: selectedColor,
     quantity: quantity
   };
   
-  fetch('/add_to_cart', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(productData)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      showNotification('Product added to cart!', 'success');
-      // Update cart count
-      const cartCount = document.querySelector('.cart-badge');
-      if (cartCount) {
-        const currentCount = parseInt(cartCount.textContent) || 0;
-        cartCount.textContent = currentCount + quantity;
-      }
-    } else {
-      showNotification(data.message, 'error');
-    }
-  })
-  .catch(error => {
-    showNotification('Error adding product to cart', 'error');
-  });
+  addToCart(productData);
 }
 
 function addToWishlist() {

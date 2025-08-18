@@ -54,43 +54,7 @@ function toggleMobileMenu() {
     navList.classList.toggle('active');
 }
 
-// Cart functionality
-function updateCartCount() {
-    const cartBadge = document.querySelector('.cart-badge');
-    if (cartBadge) {
-        // This would typically fetch the cart count from the server
-        // For now, we'll just update the display
-        const currentCount = parseInt(cartBadge.textContent) || 0;
-        cartBadge.textContent = currentCount;
-    }
-}
 
-// Add to cart functionality
-function addToCart(productId) {
-    fetch('/add-to-cart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            product_id: productId,
-            quantity: 1
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            updateCartCount();
-            showNotification('Product added to cart!', 'success');
-        } else {
-            showNotification('Failed to add product to cart', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('An error occurred', 'error');
-    });
-}
 
 // Notification system
 function showNotification(message, type = 'info') {
@@ -249,50 +213,7 @@ function toggleWishlist(productId) {
     });
 }
 
-// Quantity selector
-function updateQuantity(productId, change) {
-    const quantityElement = document.querySelector(`[data-product-id="${productId}"] .quantity`);
-    if (quantityElement) {
-        let currentQuantity = parseInt(quantityElement.textContent);
-        currentQuantity = Math.max(1, currentQuantity + change);
-        quantityElement.textContent = currentQuantity;
-        
-        // Update cart
-        updateCartItem(productId, currentQuantity);
-    }
-}
 
-// Update cart item
-function updateCartItem(productId, quantity) {
-    fetch('/update-cart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            product_id: productId,
-            quantity: quantity
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            updateCartCount();
-            updateCartTotal(data.total);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-// Update cart total
-function updateCartTotal(total) {
-    const totalElement = document.querySelector('.cart-total');
-    if (totalElement) {
-        totalElement.textContent = `₹${total}`;
-    }
-}
 
 // Initialize tooltips
 function initTooltips() {
@@ -493,9 +414,7 @@ document.addEventListener('DOMContentLoaded', initTooltips);
 // Export functions for use in other scripts
 window.ZEECLOTHS = {
     showNotification,
-    addToCart,
     toggleWishlist,
-    updateQuantity,
     filterProducts,
     validateForm,
     checkPasswordStrength,
